@@ -1,5 +1,6 @@
 #include <iostream>
-// Include the necessary header for input/output operations.
+#include "color.h"
+#include "vec3.h"
 
 int main() {
     // Define the main function.
@@ -16,6 +17,9 @@ int main() {
 		std::clog << "\rScanlines remaining: " << (image_height-j) << ' ' << std::flush;
         // Loop through each column (width) of the image.
         for (int i = 0; i < image_width; ++i) {
+			auto pixel_color = color(double(i)/(image_width-1), double(j)/(image_height-1), 0);
+			write_color(std::cout, pixel_color);
+			
             // Calculate normalized values for red and green channels.
             auto r = double(i) / (image_width - 1);
             auto g = double(j) / (image_height - 1);
