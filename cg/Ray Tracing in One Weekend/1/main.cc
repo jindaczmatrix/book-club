@@ -4,24 +4,42 @@
 
 #include <iostream>
 
-bool hit_sphere(const point3& center, double radius, const ray& r) {
+double hit_sphere(const point3& center, double radius, const ray& r) {
+    // Calculate the vector from the ray's origin to the center of the sphere
     vec3 oc = r.origin() - center;
+
+    // Coefficients for the quadratic equation
     auto a = dot(r.direction(), r.direction());
     auto b = 2.0 * dot(oc, r.direction());
     auto c = dot(oc, oc) - radius * radius;
-    auto discriminant = b*b - 4*a*c;
-    return (discriminant >= 0);
+
+    // Calculate the discriminant of the quadratic equation
+    auto discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0) {
+        return -1.0; // No intersection with the sphere
+    } else {
+        return (-b - sqrt(discriminant)) / (2.0 * a); // Return the smaller root
+    }
 }
 
+color ray_color(const ray& r) {
+    auto t = hit_sphere(point3(0,0,-1), 0.5, r);
+    
+    // Check if the ray hits the sphere
+    if (t > 0.0) {
+        vec3 N = unit_vector(r.at(t) - vec3(0,0,-1)); // Calculate normal at the intersection
+        return 0.5 * color(N.x() + 1, N.y() + 1, N.z() + 1); // Convert normal to color
+    }
 
-color ray_color(const ray &r)
-{
-    if (hit_sphere(point3(0,0,-1), 0.5, r))
-        return color(1,0,0);
+    // If not hitting the sphere, calculate background color based on ray direction
     vec3 unit_direction = unit_vector(r.direction());
     auto a = 0.5 * (unit_direction.y() + 1.0);
+
+    // Linear interpolation between white and blue gradient for sky color
     return (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 1.0);
 }
+
 
 int main()
 {
