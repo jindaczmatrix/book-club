@@ -13,33 +13,33 @@ color ray_color(const ray &r)
 
 int main()
 {
-    // Image
-    auto aspect_ratio = 16.0 / 9.0;
-    int image_width = 400;
+    auto aspect_ratio = 16.0 / 9.0;  // 宽高比
+    int image_width = 400;  // 图像宽度
 
-    // Calculate the image height, and ensure that it's at least 1.
+    // 计算图像高度，并确保它至少为1。
     int image_height = static_cast<int>(image_width / aspect_ratio);
     image_height = (image_height < 1) ? 1 : image_height;
 
-    // Camera
+    // 相机参数
 
-    auto focal_length = 1.0;
-    auto viewport_height = 2.0;
-    auto viewport_width = viewport_height * (static_cast<double>(image_width)/image_height);
-    auto camera_center = point3(0, 0, 0);
+    auto focal_length = 1.0;  // 焦距
+    auto viewport_height = 2.0;  // 视口高度
+    auto viewport_width = viewport_height * (static_cast<double>(image_width) / image_height);  // 视口宽度
+    auto camera_center = point3(0, 0, 0);  // 相机位置
 
-    // Calculate the vectors across the horizontal and down the vertical viewport edges.
-    auto viewport_u = vec3(viewport_width, 0, 0);
-    auto viewport_v = vec3(0, -viewport_height, 0);
+    // 计算视口上水平和垂直边缘的向量。
+    auto viewport_u = vec3(viewport_width, 0, 0);  // 水平边缘向量
+    auto viewport_v = vec3(0, -viewport_height, 0);  // 垂直边缘向量
 
-    // Calculate the horizontal and vertical delta vectors from pixel to pixel.
-    auto pixel_delta_u = viewport_u / image_width;
-    auto pixel_delta_v = viewport_v / image_height;
+    // 计算从像素到像素的水平和垂直增量向量。
+    auto pixel_delta_u = viewport_u / image_width;  // 像素水平增量
+    auto pixel_delta_v = viewport_v / image_height;  // 像素垂直增量
 
-    // Calculate the location of the upper left pixel.
+    // 计算左上角像素的位置。
     auto viewport_upper_left = camera_center
-                             - vec3(0, 0, focal_length) - viewport_u/2 - viewport_v/2;
-    auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
+                             - vec3(0, 0, focal_length) - viewport_u / 2 - viewport_v / 2;  // 视口左上角位置
+    auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);  // 像素(0, 0) 的位置
+
 
     // render
     std::cout << "P3\n"
@@ -58,7 +58,6 @@ int main()
 
             color pixel_color = ray_color(r);
             write_color(std::cout, pixel_color);
-
 
             // // Calculate normalized values for red and green channels.
             // auto r = double(i) / (image_width - 1);
