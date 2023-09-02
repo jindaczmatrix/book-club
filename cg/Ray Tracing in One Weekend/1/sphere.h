@@ -9,7 +9,7 @@ class sphere : public hittable {
 	private:
 		point3 center;  // 球心坐标
 		double radius;  // 半径
-		
+
 	public:
 		// 构造函数，初始化球心坐标和半径
 		sphere(point3 _center, double _radius): center(_center), radius(_radius) {}
